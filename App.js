@@ -37,6 +37,23 @@ const [musics, setMusics] = useState([
 
 ]);
 
+const changeMusic = (id) =>{
+ 
+  let newMusics = musics.filter((val,k)=>{
+    if(id == k){
+      musics[k].playing = true;
+    }
+    else{
+      musics[k].playing = false;
+    }
+
+    return musics[k];
+    }
+  )
+
+  setMusics(newMusics);
+}
+
 return (
 
 <ScrollView style={styles.container}>
@@ -54,11 +71,11 @@ return (
 </View>
 
 {
-  musics.map((val)=>{
+  musics.map((val,k)=>{
     if(val.playing){
       return(
         <View>
-          <TouchableOpacity style={styles.table}>
+          <TouchableOpacity onPress={()=>changeMusic(k)} style={styles.table}>
             <Text style={styles.textTablePlaying}><AntDesign name="play" size={17} color="#1D8954"/>{val.music}</Text>
             <Text style={styles.textTablePlaying}>{val.artist}</Text>
           </TouchableOpacity>
@@ -67,7 +84,7 @@ return (
     }else{
       return(
         <View>
-          <TouchableOpacity style={styles.table}>
+          <TouchableOpacity onPress={()=>changeMusic(k)} style={styles.table}>
             <Text style={styles.textTable}>{val.music}</Text>
             <Text style={styles.textTable}>{val.artist}</Text>
           </TouchableOpacity>
