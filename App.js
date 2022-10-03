@@ -14,7 +14,7 @@ const [musics, setMusics] = useState([
     playing : true,
     music : 'Pulse',
     artist : 'Icon for Hire',
-    file: ''
+    file: require('./songs/pulse.icon_for_hire.mp3')
 
   },
 
@@ -22,7 +22,7 @@ const [musics, setMusics] = useState([
     playing : false,
     music : 'Ohota na lisitsu',
     artist : 'Green Apelsin',
-    file: ''
+    file: require('./songs/ohota_na_lisitsu.green_apelsin.mp3') 
     
   },
 
@@ -30,18 +30,21 @@ const [musics, setMusics] = useState([
     playing : false,
     music : 'chaildfri',
     artist : ' Noize MC · Monetochka',
-    file: ''
+    file: require('./songs/chaildfri.noize_mc_monetochka.mp3') 
     
   }
 
 
 ]);
 
-const changeMusic = (id) =>{
+const changeMusic = async (id) =>{
  
+  let curFile = null;
+
   let newMusics = musics.filter((val,k)=>{
     if(id == k){
       musics[k].playing = true;
+      curFile=musics[k].file;
     }
     else{
       musics[k].playing = false;
@@ -50,6 +53,19 @@ const changeMusic = (id) =>{
     return musics[k];
     }
   )
+
+  if(audio!= null){
+    audio.unloadAsync();
+  }
+
+  let curAudio = new Audio.Sound();
+ 
+  try{
+    await curAudio.loadAsync(curFile);
+    await curAudio.playAsync();
+  }catch(error){}
+
+  setAudio(curAudio);
 
   setMusics(newMusics);
 }
