@@ -1,17 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { LogBox, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Audio } from 'expo-av';
 import { cloneElement, useState } from 'react';
 import {AntDesign} from '@expo/vector-icons';
+import Player from './Player';
 
 export default function App() {
+
+LogBox.ignoreAllLogs(true);
+
+const [audioIndex, setAudioIndex] = useState(0);
+
+const [playing, setPlaying] = useState(false);
   
 const [audio, setAudio] = useState(null); 
 
 const [musics, setMusics] = useState([
 
   {
-    playing : true,
+    playing : false,
     music : 'Pulse',
     artist : 'Icon for Hire',
     file: require('./songs/pulse.icon_for_hire.mp3')
@@ -32,9 +39,15 @@ const [musics, setMusics] = useState([
     artist : ' Noize MC · Monetochka',
     file: require('./songs/chaildfri.noize_mc_monetochka.mp3') 
     
+  },
+
+  {
+    playing : false,
+    music : 'SoundHelix Test 1',
+    artist : 'SoundHelix',
+    file: {uri:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'}
+    
   }
-
-
 ]);
 
 const changeMusic = async (id) =>{
@@ -45,6 +58,7 @@ const changeMusic = async (id) =>{
     if(id == k){
       musics[k].playing = true;
       curFile=musics[k].file;
+      setAudioIndex(id);
     }
     else{
       musics[k].playing = false;
@@ -68,12 +82,15 @@ const changeMusic = async (id) =>{
   setAudio(curAudio);
 
   setMusics(newMusics);
+
+  setPlaying(true);
 }
 
 return (
+<View style={{flex:1}}>
+<StatusBar hidden/>
 
 <ScrollView style={styles.container}>
-<StatusBar hidden/>
 
 <View style={styles.header}>
   <Text style={styles.textTitle}>Music App !</Text>
@@ -111,7 +128,9 @@ return (
 }
 
 </ScrollView>
-
+<Player playing={playing} setPlaying={setPlaying} audioIndex={audioIndex} musics={musics} setMusics={setMusics} audio={audio} setAudio={setAudio}>
+</Player>
+</View>
   );
 }
 
