@@ -7,6 +7,91 @@ export default function Player(props) {
 
     LogBox.ignoreAllLogs(true);
 
+    const handleBack = async() => {
+        let newIndex = props.audioIndex - 1;
+        if(newIndex < 0){
+            newIndex = props.musics.length - 1;
+        }
+        props.setAudioIndex(newIndex);
+
+        let curFile = props.musics[newIndex].file;
+        //Atualizar interface do app.
+        let newMusics = props.musics.filter((val,k)=>{
+            if(newIndex == k){
+                props.musics[k].playing = true;
+               
+                curFile = props.musics[k].file;
+                
+            }
+            else{
+                props.musics[k].playing = false;
+            }
+
+            return props.musics[k];
+      })
+
+        //Reproduzir audio em questao.
+        if(props.audio != null){
+            props.audio.unloadAsync();
+        }
+        let curAudio = new Audio.Sound();
+        try{
+           await curAudio.loadAsync(curFile);
+            await curAudio.playAsync();
+        }catch(error){}
+
+        props.setrAudio(curAudio);
+        props.setMusics(newMusics);
+        props.setPlaying(true);
+
+
+    
+
+     }
+
+
+        
+
+    const handleNext = async()=>{
+        let newIndex = props.audioIndex +1;
+        if(newIndex >= props.musics.length){
+            newIndex = 0;
+        }
+
+        props.setAudioIndex(newIndex);
+
+        let curFile = props.musics[newIndex].file;
+
+        //Update App interface
+        let newMusics = props.musics.filter((val,k)=>{
+            if(k == newIndex){
+              props.musics[k].playing = true;
+              curFile = props.musics[k].file;
+            }
+            else{
+              props.musics[k].playing = false;
+            }
+        
+            return props.musics[k];
+            })
+ 
+
+        if(props.audio != null){
+            props.audio.unloadAsync();
+        }
+
+        let curAudio = new Audio.Sound();
+            try{
+                await curAudio.loadAsync(curFile);
+                await curAudio.playAsync();
+            }catch(error){}
+
+        props.setAudio(curAudio);
+        props.setMusics(newMusics);
+        props.setPlaying(true);
+
+    }
+
     const handlePlay = async()=>{
 
         let curFile = props.musics[props.audioIndex].file;
@@ -56,7 +141,7 @@ export default function Player(props) {
     return(
         <View style={styles.playerLayout}>
 
-            <TouchableOpacity style={{marginLeft:20, marginRight:20}}>
+            <TouchableOpacity onPress={()=>handleBack()} style={{marginLeft:20, marginRight:20}}>
                 <AntDesign name="banckward" size={25} color="white"/>
             </TouchableOpacity>
 
@@ -73,7 +158,7 @@ export default function Player(props) {
 
             }
             
-            <TouchableOpacity style={{marginLeft:20, marginRight:20}}>
+            <TouchableOpacity onPress={()=>handleNext()} style={{marginLeft:20, marginRight:20}}>
                 <AntDesign name="forward" size={25} color="white"/>
             </TouchableOpacity>
 
