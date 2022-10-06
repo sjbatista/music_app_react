@@ -9,7 +9,7 @@ export default function App() {
 
 LogBox.ignoreAllLogs(true);
 
-const [audioIndex, setAudioIndex] = useState(0);
+const [audioIndex,setAudioIndex] = useState(0);
 
 const [playing, setPlaying] = useState(false);
   
@@ -128,7 +128,7 @@ return (
 }
 
 </ScrollView>
-<Player playing={playing} setPlaying={setPlaying} audioIndex={audioIndex} musics={musics} setMusics={setMusics} audio={audio} setAudio={setAudio}>
+<Player playing={playing} setPlaying={setPlaying} setAudioIndex={setAudioIndex} audioIndex={audioIndex} musics={musics} setMusics={setMusics} audio={audio} setAudio={setAudio}>
 </Player>
 </View>
   );

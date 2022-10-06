@@ -7,11 +7,13 @@ export default function Player(props) {
 
     LogBox.ignoreAllLogs(true);
 
-    const handleBack = async() => {
+    const handleBack = async () => {
+
         let newIndex = props.audioIndex - 1;
         if(newIndex < 0){
             newIndex = props.musics.length - 1;
         }
+
         props.setAudioIndex(newIndex);
 
         let curFile = props.musics[newIndex].file;
@@ -52,7 +54,7 @@ export default function Player(props) {
 
         
 
-    const handleNext = async()=>{
+    const handleNext = async ()=>{
         let newIndex = props.audioIndex +1;
         if(newIndex >= props.musics.length){
             newIndex = 0;
